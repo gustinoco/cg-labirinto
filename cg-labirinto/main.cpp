@@ -1,16 +1,3 @@
-/*
- * GLUT Shapes Demo
- *
- * Written by Nigel Stewart November 2003
- *
- * This program is test harness for the sphere, cone
- * and torus shapes in GLUT.
- *
- * Spinning wireframe and smooth shaded shapes are
- * displayed until the ESC or q key is pressed.  The
- * number of geometry stacks and slices can be adjusted
- * using the + and - keys.
- */
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -51,19 +38,68 @@ int main()
         printf("\n");
     }
 
-    int entrada =0, saida = 0;
-    printf("\n\n Digite a entrada: ");
-    scanf("%d",&entrada);
-    printf("\n\n Digite a saida: ");
-    scanf("%d",&saida);
-    if(verificaEntradaSaida(entrada, saida, linha, coluna) == 0)
+    int entradaLinha, entradaColuna, saidaLinha, saidaColuna;
+    printf("\n\n Digite a linha entrada de 0 ate' %d: ", linha -1);
+    scanf("%d",&entradaLinha);
+    printf("\n\n Digite a coluna entrada de 0 ate' %d: ", coluna -1);
+    scanf("%d",&entradaColuna);
+    printf("\n\n Digite a linha saida de 0 ate' %d: ", linha -1);
+    scanf("%d",&saidaLinha);
+    printf("\n\n Digite a coluna saida de 0 ate' %d: ",coluna -1);
+    scanf("%d",&saidaColuna);
+
+    labirinto[entradaLinha][entradaColuna] = 0;
+    labirinto[saidaLinha][saidaColuna] = -1;
+    printf("\n\n\n IMPRESSAO COM ENTRADAS \n");
+    for (int i = 0; i < linha; i++)
     {
-        printf("Entrada e saida invalidos");
+        for (int j = 0; j < coluna; j++)
+        {
+            printf("%d ", labirinto[i][j]);
+        }
+        printf("\n");
     }
 
-    printf("\n\nEntrada: %d   e saida  %d",entrada,saida);
+    int entrada[entradaLinha][entradaColuna];
+    int d=entradaLinha,e=entradaColuna;
+    while(entrada[d][e] != labirinto[saidaLinha][saidaColuna])
+    {
+        int e = pegaLado();
+        switch (pegaLado())
+        {
+        case 0:
+            printf("0 \n");
+            if(entrada[d++][e] == 1)
+            {
+                entrada[d++][e] = 0;
+                entrada[d][e] = entrada[d++][e];
+            }
+            break;
+        case 1:
+            if(entrada[d][e++] == 1)
+            {
+                entrada[d][e++] = 0;
+                entrada[d][e] = entrada[d][e++];
+                printf("1 \n");
+            }
+            break;
+        case 2:
+            if(entrada[d--][e] == 1){
+                entrada[d--][e] = 0;
+                entrada[d][e] = entrada[d--][e];
+                printf("2 \n");
+            }
+            break;
+        case 3:
+            if(entrada[d][e--] == 1){
+                entrada[d][e--] = 0;
+            entrada[d][e] = entrada[d][e--];
+            printf("3 \n");
+            }
+            break;
 
-
+        }
+    }
 
 }
 
@@ -74,8 +110,8 @@ int verificaEntradaSaida(int entrada, int saida, int linha, int coluna)
     {
         return 1;
     }
-    else
-        return 0;
+
+    return 0;
 }
 
 
