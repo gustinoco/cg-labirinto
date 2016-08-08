@@ -9,13 +9,11 @@
 #include <stdio.h>
 #include <time.h>
 
-
 void travessiaLabirinto();
 int geradorLabirinto();
 int pegaLado();
 int verificaEntradaSaida(int entrada, int saida, int linha, int coluna);
-
-
+int lado;
 int main()
 {
     int linha=0, coluna=0;
@@ -62,10 +60,12 @@ int main()
 
     int entrada[entradaLinha][entradaColuna];
     int d=entradaLinha,e=entradaColuna;
+
+int fr = 0;
     while(entrada[d][e] != labirinto[saidaLinha][saidaColuna])
     {
-        int e = pegaLado();
-        switch (pegaLado())
+
+        switch (fr)
         {
         case 0:
             printf("0 \n");
@@ -99,8 +99,18 @@ int main()
             break;
 
         }
+        fr = fr +1;
     }
 
+
+     for (int i = 0; i < linha; i++)
+    {
+        for (int j = 0; j < coluna; j++)
+        {
+            printf("%d ", labirinto[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 
@@ -122,8 +132,12 @@ void travessiaLabirinto()
 
 int pegaLado()
 {
-    srand((unsigned)time(NULL));
-    return rand() % 4;
+  if(lado == 3)
+    lado = 0;
+    else lado++;
+  return lado;
+    //return rand() % 4;
+    //return rand() % 4;
 
 }
 
