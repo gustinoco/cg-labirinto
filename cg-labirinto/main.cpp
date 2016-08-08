@@ -14,18 +14,21 @@ int geradorLabirinto();
 int pegaLado();
 int verificaEntradaSaida(int entrada, int saida, int linha, int coluna);
 int lado;
-int main()
+void display();
+void desenhaLabinrinto();
+void keyboard(int key, int x, int y);
+int linha,coluna,entradaLinha,entradaColuna,saidaLinha,saidaColuna;
+int labirinto[100][100];
+
+int main(int argc, char *argv)
 {
-    int linha=0, coluna=0;
-
-
     printf("Digite o as coluna ");
     scanf("%d",&coluna);
     printf("\nDigite a  qtd linha");
     scanf("%d",&linha);
     printf("\nImpressao do labirinto preenchido...\n\n\n");
 
-    int labirinto[linha][coluna];
+   // labirinto[linha][coluna];
     for (int i = 0; i < linha; i++)
     {
         for (int j = 0; j < coluna; j++)
@@ -36,7 +39,7 @@ int main()
         printf("\n");
     }
 
-    int entradaLinha, entradaColuna, saidaLinha, saidaColuna;
+//    int entradaLinha, entradaColuna, saidaLinha, saidaColuna;
     printf("\n\n Digite a linha entrada de 0 ate' %d: ", linha -1);
     scanf("%d",&entradaLinha);
     printf("\n\n Digite a coluna entrada de 0 ate' %d: ", coluna -1);
@@ -45,6 +48,8 @@ int main()
     scanf("%d",&saidaLinha);
     printf("\n\n Digite a coluna saida de 0 ate' %d: ",coluna -1);
     scanf("%d",&saidaColuna);
+
+
 
     labirinto[entradaLinha][entradaColuna] = 0;
     labirinto[saidaLinha][saidaColuna] = -1;
@@ -57,6 +62,28 @@ int main()
         }
         printf("\n");
     }
+
+
+  glutInit(&argc, &argv);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
+	glutInitWindowSize(400, 400);
+	//glutInitWindowPosition(150, 150);
+	glutCreateWindow("Labirinto");
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(-1, coluna + 1, linha + 1, -1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+
+	glutDisplayFunc(display);
+
+//	glutMouseFunc(mouse);
+	glutMainLoop();
+    //glutSpecialFunc(teclado);
+
+
+    /*
 
     int entrada[entradaLinha][entradaColuna];
     int d=entradaLinha,e=entradaColuna;
@@ -110,7 +137,7 @@ int fr = 0;
             printf("%d ", labirinto[i][j]);
         }
         printf("\n");
-    }
+    }*/
 }
 
 
@@ -125,6 +152,49 @@ int verificaEntradaSaida(int entrada, int saida, int linha, int coluna)
 }
 
 
+void display(){
+    glColor3d(0, 0, 0);
+    glClearColor(255, 255, 255, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    desenhaLabinrinto();
+    travessiaLabirinto();
+    glFlush();
+
+}
+
+void desenhaLabinrinto(){
+	for (int i = 0; i<linha; i++)
+		for (int j = 0; j<coluna; j++)
+		{
+		glBegin(GL_QUADS);
+		if (labirinto[i][j] == 0)
+			glColor3f(1.0, 1.0, 1.0);
+		else
+			glColor3f(0.3, 0.3, 0.3);
+
+        if(labirinto[i][j] == labirinto[saidaLinha][saidaColuna])
+            glColor3f(1.0, 0.0, 0.0);
+
+		if(labirinto[i][j] == labirinto[entradaLinha][entradaColuna])
+            glColor3f(0.3, 1.0, 0.0);
+
+		glVertex2i(j, i);
+		glVertex2i(j, i + 1);
+		glVertex2i(j + 1, i + 1);
+		glVertex2i(j + 1, i);
+		glEnd();
+		glBegin(GL_LINE_LOOP);
+		glColor3f(0.6, 0.6, 0.6);
+		glVertex2i(j, i);
+		glVertex2i(j, i + 1);
+		glVertex2i(j + 1, i + 1);
+		glVertex2i(j + 1, i);
+		glEnd();
+		}
+}
+
+/*void keyboard(int key, int x, int y) {
+}*/
 void travessiaLabirinto()
 {
 
