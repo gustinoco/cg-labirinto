@@ -242,3 +242,10 @@
 	<stdio.h>
 	<time.h>
 
+1470963977 source:c:\bkoffice\cg-labirinto\cg-labirinto\main.cpp
+	<GLUT/glut.h>
+	<GL/glut.h>
+	<stdlib.h>
+	<stdio.h>
+	<time.h>
+
