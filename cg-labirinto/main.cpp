@@ -140,9 +140,9 @@ void desenhaLabirinto()
 
 //gera direcao
 // 0 = ^^
-// 1 = >>
-// 2 = <<
-// 3 = \/
+// 1 = <<
+// 2 = \/
+// 3 = >>
 int geraDirecao()
 {
     int x = 0;
@@ -150,7 +150,6 @@ int geraDirecao()
     x = rand() % 4;
     return x;
 }
-//int fr = 0;
 void travessiaLabirinto()
 {
     int fr = geraDirecao();
@@ -163,57 +162,91 @@ void travessiaLabirinto()
         printf("\n0 ");
         printf("\n linha: %d",entradaLinha-1);
         printf("\n coluna: %d",entradaColuna);
-        if(entradaLinha-1 > linha && entradaLinha-1 < 0  && labirinto[entradaLinha-1][entradaColuna] == 1)
+        if(labirinto[entradaLinha-1][entradaColuna] != -1)
         {
-            labirinto[entradaLinha-1][entradaColuna] = 0;
-            entradaLinha--;
+
+
+            if(labirinto[entradaLinha-1][entradaColuna] == 1)
+            {
+                labirinto[entradaLinha-1][entradaColuna] = 0;
+                entradaLinha--;
+            }
+            else
+            {
+                printf("PAREDE 0");
+            }
         }
         else
         {
-            printf("PAREDE 0");
+            printf("\n\nGANHOU!\n\n");
+            exit(0);
         }
         break;
     case 1:
         printf("\n1");
-            printf("\n linha: %d",entradaLinha);
-            printf("\n coluna: %d",entradaColuna-1);
-        if(labirinto[entradaLinha][entradaColuna-1] == 1)
+        printf("\n linha: %d",entradaLinha);
+        printf("\n coluna: %d",entradaColuna-1);
+
+        if(labirinto[entradaLinha-1][entradaColuna] != -1)
         {
-            labirinto[entradaLinha][entradaColuna-1] = 0;
-            entradaColuna--;
+            if(labirinto[entradaLinha][entradaColuna-1] == 1)
+            {
+                labirinto[entradaLinha][entradaColuna-1] = 0;
+                entradaColuna--;
+            }
+            else
+            {
+                printf("PAREDE 1");
+            }
         }
         else
         {
-            printf("PAREDE 1");
+            printf("\n\nGANHOU!\n\n");
+            exit(0);
         }
         break;
     case 2:
         printf("\n2");
-            printf("\n linha: %d",entradaLinha+1);
-            printf("\n coluna: %d",entradaColuna);
-        if(labirinto[entradaLinha+1][entradaColuna] == 1)
+        printf("\n linha: %d",entradaLinha+1);
+        printf("\n coluna: %d",entradaColuna);
+        if(labirinto[entradaLinha+1][entradaColuna] != -1)
         {
-            labirinto[entradaLinha+1][entradaColuna] = 0;
-            entradaLinha++;
+            if(labirinto[entradaLinha+1][entradaColuna] == 1)
+            {
+                labirinto[entradaLinha+1][entradaColuna] = 0;
+                entradaLinha++;
+            }
+            else
+            {
+                printf("PAREDE 2");
+            }
         }
         else
         {
-            printf("PAREDE 2");
+            printf("\n\nGANHOU!\n\n");
+            exit(0);
         }
         break;
     case 3:
-
-            printf("\n3");
-            printf("\n linha: %d",entradaLinha);
-            printf("\n coluna: %d",entradaColuna+1);
-            if(labirinto[entradaLinha][entradaColuna+1] == 1)
+        printf("\n3");
+        printf("\n linha: %d",entradaLinha);
+        printf("\n coluna: %d",entradaColuna+1);
+        if(labirinto[entradaLinha][entradaColuna+1] != -1)
         {
-            labirinto[entradaLinha][entradaColuna+1] = 0;
-            entradaColuna++;
+            if(labirinto[entradaLinha][entradaColuna+1] == 1)
+            {
+                labirinto[entradaLinha][entradaColuna+1] = 0;
+                entradaColuna++;
+            }
+            else
+            {
+                printf("PAREDE 3");
+            }
         }
         else
         {
-            printf("PAREDE 3");
+            printf("\n\nGANHOU!\n\n");
+            exit(0);
         }
         break;
     }
