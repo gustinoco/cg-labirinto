@@ -11,18 +11,10 @@
 
 void travessiaLabirinto();
 int geradorLabirinto();
-int pegaLado();
-int verificaEntradaSaida(int entrada, int saida, int linha, int coluna);
-int lado;
 void display();
 void desenhaLabirinto();
 int linha,coluna,entradaLinha,entradaColuna,saidaLinha,saidaColuna;
 int labirinto[100][100];
-void janela(void)
-{
-
-    printf("\nevento de desenho...\n");
-}
 
 void teclado(unsigned char key, int x, int y)
 {
@@ -92,7 +84,6 @@ int main(int argc, char *argv)
     glutInit(&argc, &argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA);
     glutInitWindowSize(400, 400);
-    //glutInitWindowPosition(150, 150);
     glutCreateWindow("Labirinto");
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -102,75 +93,7 @@ int main(int argc, char *argv)
     glutDisplayFunc(display);
     glutKeyboardFunc(teclado);
     glutMainLoop();
-
-    /*
-
-    int entrada[entradaLinha][entradaColuna];
-    int d=entradaLinha,e=entradaColuna;
-
-    int fr = 0;
-    while(entrada[d][e] != labirinto[saidaLinha][saidaColuna])
-    {
-
-        switch (fr)
-        {
-        case 0:
-            printf("0 \n");
-            if(entrada[d++][e] == 1)
-            {
-                entrada[d++][e] = 0;
-                entrada[d][e] = entrada[d++][e];
-            }
-            break;
-        case 1:
-            if(entrada[d][e++] == 1)
-            {
-                entrada[d][e++] = 0;
-                entrada[d][e] = entrada[d][e++];
-                printf("1 \n");
-            }
-            break;
-        case 2:
-            if(entrada[d--][e] == 1){
-                entrada[d--][e] = 0;
-                entrada[d][e] = entrada[d--][e];
-                printf("2 \n");
-            }
-            break;
-        case 3:
-            if(entrada[d][e--] == 1){
-                entrada[d][e--] = 0;
-            entrada[d][e] = entrada[d][e--];
-            printf("3 \n");
-            }
-            break;
-
-        }
-        fr = fr +1;
-    }
-
-
-     for (int i = 0; i < linha; i++)
-    {
-        for (int j = 0; j < coluna; j++)
-        {
-            printf("%d ", labirinto[i][j]);
-        }
-        printf("\n");
-    }*/
 }
-
-
-int verificaEntradaSaida(int entrada, int saida, int linha, int coluna)
-{
-    if(entrada == linha && entrada == coluna && saida == linha && saida == coluna )
-    {
-        return 1;
-    }
-
-    return 0;
-}
-
 
 void display()
 {
@@ -216,7 +139,7 @@ void desenhaLabirinto()
 
 
 //gera direcao
-// 0 =
+// 0 = ^^
 // 1 = >>
 // 2 = <<
 // 3 = \/
@@ -227,51 +150,73 @@ int geraDirecao()
     x = rand() % 4;
     return x;
 }
-int fr = 0;
+//int fr = 0;
 void travessiaLabirinto()
 {
-
+    int fr = geraDirecao();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glClear(GL_COLOR_BUFFER_BIT);
-        switch(fr)
+    switch(fr)
+    {
+    case 0:
+        printf("\n0 ");
+        printf("\n linha: %d",entradaLinha-1);
+        printf("\n coluna: %d",entradaColuna);
+        if(entradaLinha-1 > linha && entradaLinha-1 < 0  && labirinto[entradaLinha-1][entradaColuna] == 1)
         {
-        case 0:
-            printf("\n0 ");
-            if(labirinto[entradaLinha++][entradaColuna] == 1)
-            {
-                labirinto[entradaLinha++][entradaColuna] = 0;
-               // labirinto[entradaLinha][entradaColuna] = labirinto[entradaLinha++][entradaColuna];
-            }
-            break;
-        case 1:
-            if(labirinto[entradaLinha][entradaColuna++] == 1)
-            {
-                labirinto[entradaLinha][entradaColuna++] = 0;
-               // labirinto[entradaLinha][entradaColuna] = labirinto[entradaLinha][entradaColuna++];
-                printf("1 \n");
-            }
-            break;
-        case 2:
-            if(labirinto[entradaLinha--][entradaColuna] == 1)
-            {
-                labirinto[entradaLinha--][entradaColuna] = 0;
-             //   labirinto[entradaLinha][entradaColuna] = labirinto[entradaLinha--][entradaColuna];
-                printf("2 \n");
-            }
-            break;
-        case 3:
-            if(labirinto[entradaLinha][entradaColuna--] == 1)
-            {
-                labirinto[entradaLinha][entradaColuna--] = 0;
-              //  labirinto[entradaLinha][entradaColuna] = labirinto[entradaLinha][entradaColuna--];
-                printf("3 \n");
-            }
-            break;
-
+            labirinto[entradaLinha-1][entradaColuna] = 0;
+            entradaLinha--;
         }
-        fr++;
+        else
+        {
+            printf("PAREDE 0");
+        }
+        break;
+    case 1:
+        printf("\n1");
+            printf("\n linha: %d",entradaLinha);
+            printf("\n coluna: %d",entradaColuna-1);
+        if(labirinto[entradaLinha][entradaColuna-1] == 1)
+        {
+            labirinto[entradaLinha][entradaColuna-1] = 0;
+            entradaColuna--;
+        }
+        else
+        {
+            printf("PAREDE 1");
+        }
+        break;
+    case 2:
+        printf("\n2");
+            printf("\n linha: %d",entradaLinha+1);
+            printf("\n coluna: %d",entradaColuna);
+        if(labirinto[entradaLinha+1][entradaColuna] == 1)
+        {
+            labirinto[entradaLinha+1][entradaColuna] = 0;
+            entradaLinha++;
+        }
+        else
+        {
+            printf("PAREDE 2");
+        }
+        break;
+    case 3:
 
+            printf("\n3");
+            printf("\n linha: %d",entradaLinha);
+            printf("\n coluna: %d",entradaColuna+1);
+            if(labirinto[entradaLinha][entradaColuna+1] == 1)
+        {
+            labirinto[entradaLinha][entradaColuna+1] = 0;
+            entradaColuna++;
+        }
+        else
+        {
+            printf("PAREDE 3");
+        }
+        break;
+    }
     for (int i = 0; i<linha; i++)
         for (int j = 0; j<coluna; j++)
         {
@@ -281,7 +226,6 @@ void travessiaLabirinto()
 
             if(labirinto[i][j] == 0)
                 glColor3f(1.0, 1.0, 1.0);
-
 
             if(labirinto[i][j] == labirinto[saidaLinha][saidaColuna])
                 glColor3f(1.0, 0.0, 0.0);
@@ -302,17 +246,6 @@ void travessiaLabirinto()
             glVertex2i(j + 1, i);
             glEnd();
         }
-glFlush();
-}
-
-int pegaLado()
-{
-    if(lado == 3)
-        lado = 0;
-    else
-
-        lado++;
-    return lado;
-
+    glFlush();
 }
 
