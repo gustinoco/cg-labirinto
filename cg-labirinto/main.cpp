@@ -1,63 +1,70 @@
-
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
 #include <GL/glut.h>
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 
 void travessiaLabirinto();
 int geradorLabirinto();
+
 void display();
+void ganhou();
 void desenhaLabirinto();
+void mostraParedeOuDirecao(int fr,int direcao);
 int linha,coluna,entradaLinha,entradaColuna,saidaLinha,saidaColuna;
 int labirinto[100][100];
+int pilha[100][100];
+void exibePilha();
+
 
 void teclado(unsigned char key, int x, int y)
 {
     switch (key)
     {
+    case 'Q':
     case 'q':
         exit(0);
         break;
-    case 'r':
-        glutDisplayFunc(desenhaLabirinto);
-        printf("REINICIA");
-        break;
+    case 'A':
     case 'a':
         glutDisplayFunc(travessiaLabirinto);
         glutPostRedisplay();
-        printf("\nGera caminho do desenho");
         break;
-    default:
-        printf("\nevento de teclado\n");
-        break;
+    case 'p':
+    case 'P':
+        exibePilha();
+    }
+}
+
+void exibePilha(){
+//    printf("%d",pilha[0]);
+    for (int i = 0; i < linha; i++)
+    {
+        for (int j = 0; j < coluna; j++)
+        {
+            if(pilha[i][j]==1)
+                printf("%d ", pilha[i][j]);
+        }
+        printf("\n");
     }
 }
 
 int main(int argc, char *argv)
 {
-    printf("Digite o as coluna ");
-    scanf("%d",&coluna);
-    printf("\nDigite a  qtd linha");
-    scanf("%d",&linha);
-    printf("\nImpressao do labirinto preenchido...\n\n\n");
 
+    printf("Digite a quantidade de colunas: ");
+    scanf("%d",&coluna);
+    printf("\nDigite a quantidade de linhas: ");
+    scanf("%d",&linha);
     for (int i = 0; i < linha; i++)
     {
         for (int j = 0; j < coluna; j++)
         {
             labirinto[i][j] = 1;
-            printf("%d ", labirinto[i][j]);
         }
-        printf("\n");
     }
 
 
-    printf("\n\n Digite a linha entrada de 0 ate' %d: ", linha -1);
+    printf("\nDigite a linha entrada de 0 ate' %d: ", linha -1);
     scanf("%d",&entradaLinha);
     printf("\n\n Digite a coluna entrada de 0 ate' %d: ", coluna -1);
     scanf("%d",&entradaColuna);
@@ -70,7 +77,7 @@ int main(int argc, char *argv)
 
     labirinto[entradaLinha][entradaColuna] = 2;
     labirinto[saidaLinha][saidaColuna] = -1;
-    printf("\n\n\n IMPRESSAO COM ENTRADAS \n");
+    printf("\n\n\n Como sera' o labirinto... \n");
     for (int i = 0; i < linha; i++)
     {
         for (int j = 0; j < coluna; j++)
@@ -138,11 +145,6 @@ void desenhaLabirinto()
 }
 
 
-//gera direcao
-// 0 = ^^
-// 1 = <<
-// 2 = \/
-// 3 = >>
 int geraDirecao()
 {
     int x = 0;
@@ -152,6 +154,8 @@ int geraDirecao()
 }
 void travessiaLabirinto()
 {
+
+
     int fr = geraDirecao();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -159,31 +163,29 @@ void travessiaLabirinto()
     switch(fr)
     {
     case 0:
-        printf("\n0 ");
+        mostraParedeOuDirecao(fr,0);
         printf("\n linha: %d",entradaLinha-1);
         printf("\n coluna: %d",entradaColuna);
         if(labirinto[entradaLinha-1][entradaColuna] != -1)
         {
-
-
             if(labirinto[entradaLinha-1][entradaColuna] == 1)
             {
                 labirinto[entradaLinha-1][entradaColuna] = 0;
                 entradaLinha--;
+                pilha[entradaLinha-1][entradaColuna] = 1;
             }
             else
             {
-                printf("PAREDE 0");
+                mostraParedeOuDirecao(fr,1);
             }
         }
         else
         {
-            printf("\n\nGANHOU!\n\n");
-            exit(0);
+            ganhou();
         }
         break;
     case 1:
-        printf("\n1");
+        mostraParedeOuDirecao(fr,0);
         printf("\n linha: %d",entradaLinha);
         printf("\n coluna: %d",entradaColuna-1);
 
@@ -193,20 +195,20 @@ void travessiaLabirinto()
             {
                 labirinto[entradaLinha][entradaColuna-1] = 0;
                 entradaColuna--;
+                pilha[entradaLinha][entradaColuna-1] = 1;
             }
             else
             {
-                printf("PAREDE 1");
+                mostraParedeOuDirecao(fr,1);
             }
         }
         else
         {
-            printf("\n\nGANHOU!\n\n");
-            exit(0);
+            ganhou();
         }
         break;
     case 2:
-        printf("\n2");
+        mostraParedeOuDirecao(fr,0);
         printf("\n linha: %d",entradaLinha+1);
         printf("\n coluna: %d",entradaColuna);
         if(labirinto[entradaLinha+1][entradaColuna] != -1)
@@ -215,20 +217,20 @@ void travessiaLabirinto()
             {
                 labirinto[entradaLinha+1][entradaColuna] = 0;
                 entradaLinha++;
+                pilha[entradaLinha+1][entradaColuna] = 1;
             }
             else
             {
-                printf("PAREDE 2");
+                mostraParedeOuDirecao(fr,1);
             }
         }
         else
         {
-            printf("\n\nGANHOU!\n\n");
-            exit(0);
+            ganhou();
         }
         break;
     case 3:
-        printf("\n3");
+        mostraParedeOuDirecao(fr,0);
         printf("\n linha: %d",entradaLinha);
         printf("\n coluna: %d",entradaColuna+1);
         if(labirinto[entradaLinha][entradaColuna+1] != -1)
@@ -237,16 +239,16 @@ void travessiaLabirinto()
             {
                 labirinto[entradaLinha][entradaColuna+1] = 0;
                 entradaColuna++;
+                pilha[entradaLinha][entradaColuna+1] = 1;
             }
             else
             {
-                printf("PAREDE 3");
+                mostraParedeOuDirecao(fr,1);
             }
         }
         else
         {
-            printf("\n\nGANHOU!\n\n");
-            exit(0);
+            ganhou();
         }
         break;
     }
@@ -280,5 +282,50 @@ void travessiaLabirinto()
             glEnd();
         }
     glFlush();
+}
+void mostraParedeOuDirecao(int fr, int direcao)
+{/*// 0 = ^^
+// 1 = <<
+// 2 = \/
+// 3 = >>*/
+    char mensagem[] = "";
+    switch(fr)
+    {
+    case 0:
+        strcat(mensagem, "Norte");
+        break;
+    case 1:
+        strcat(mensagem, "Oeste");
+
+        break;
+    case 2:
+        strcat(mensagem, "Sul");
+
+        break;
+    case 3:
+        strcat(mensagem, "Leste");
+        break;
+    }
+    if(direcao == 0)
+    {
+        char direcaoMensagem[] = "\n\nDirecao apontada sentido: ";
+        strcat(direcaoMensagem, mensagem);
+        printf ("%s", direcaoMensagem);
+    }
+    else
+    {
+        if(direcao == 1)
+        {
+            char direcaoMensagem[] = "\nParede encontrada no sentido:";
+            strcat(direcaoMensagem, mensagem);
+            printf ("%s", direcaoMensagem);
+        }
+    }
+}
+void ganhou()
+{
+
+    printf("\nParabe'ns, voce ganhou!");
+    exit(0);
 }
 
