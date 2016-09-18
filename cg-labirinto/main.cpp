@@ -97,7 +97,7 @@ int main(int argc, char *argv)
     gluOrtho2D(-1, coluna + 1, linha + 1, -1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glutDisplayFunc(display);
+    glutDisplayFunc(travessiaLabirinto);
     glutKeyboardFunc(teclado);
     glutMainLoop();
 }
@@ -154,8 +154,8 @@ int geraDirecao()
 }
 void travessiaLabirinto()
 {
-
-
+while(1){
+Sleep(200);
     int fr = geraDirecao();
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -282,6 +282,7 @@ void travessiaLabirinto()
             glEnd();
         }
     glFlush();
+    }
 }
 void mostraParedeOuDirecao(int fr, int direcao)
 {/*// 0 = ^^
@@ -326,6 +327,7 @@ void ganhou()
 {
 
     printf("\nParabe'ns, voce ganhou!");
+    //return 0;
     exit(0);
 }
 
